@@ -1,12 +1,15 @@
 'use client'
 
-import InputField from '@/components/InputField'
-import { ERROR_MESSAGES } from '@/lib/constants'
-import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
 import React from 'react'
+import axios from 'axios'
+import Link from 'next/link'
+import toast from 'react-hot-toast'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import InputField from '@/components/InputField'
+import { ERROR_MESSAGES } from '@/lib/constants'
 
 const schema = z.object({
   username: z
@@ -24,21 +27,32 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>
 
 const SingupPage = () => {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({ resolver: zodResolver(schema) })
 
-  const signup = handleSubmit((data) => {
+  const signup = handleSubmit(async (data) => {
     console.log('-data', data)
+
+    try {
+      const response = await axios.post('/api/users/signup', data)
+      console.log('response', response)
+      router.push('/login')
+    } catch (error: any) {
+      console.log('-err', error)
+      toast.error(error.message)
+    }
   })
 
   return (
     <div className="bg-[#f7f8fa] w-screen h-screen flex items-center justify-center">
       <form
         onSubmit={signup}
-        className="bg-white w-[380px] max-w-[90%] mx-auto p-4 rounded-md flex flex-col gap-4"
+        className="bg-white max-w-[380px] w-[90%] mx-auto p-8 rounded-md flex flex-col gap-4"
       >
         <h1 className="text-xl font-semibold text-center">SignUp</h1>
         <InputField

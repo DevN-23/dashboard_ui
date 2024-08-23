@@ -13,4 +13,8 @@ export const ERROR_MESSAGES = {
   IMG_REQUIRED: 'Image is required!',
 }
 
+export const SERVER_CONSTANTS = {
+  TOKEN_EXPIRY_DURATION: '3h'
+}
+
 export const GENDERS: any = ['male', 'female'];

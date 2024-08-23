@@ -3,9 +3,12 @@
 import InputField from '@/components/InputField'
 import { ERROR_MESSAGES } from '@/lib/constants'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -16,14 +19,24 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>
 
 const LoginPage = () => {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({ resolver: zodResolver(schema) })
 
-  const login = handleSubmit((data) => {
+  const login = handleSubmit(async (data) => {
     console.log('-data', data)
+    try {
+      const res = await axios.post('/api/users/login', data)
+      console.log(res)
+      toast.success('Login Success!')
+      router.push('/admin')
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   })
 
   return (
