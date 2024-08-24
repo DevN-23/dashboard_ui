@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
 
     const token = await jwt.sign(tokenData, process.env.JWT_SECRET_KEY!, { expiresIn: SERVER_CONSTANTS.TOKEN_EXPIRY_DURATION })
 
-    console.log(' -toje', token)
     const response = NextResponse.json({ message: 'Login Success!', success: true }, { status: 200 })
 
     response.cookies.set('token', token, { httpOnly: true })
@@ -37,6 +36,7 @@ export async function POST(req: NextRequest) {
     return response
 
   } catch (error) {
-    return NextResponse.json({ message: 'Failed!', error }, { status: 501 })
+    console.log(error)
+    return NextResponse.json({ message: 'Failed! Server Error.', error }, { status: 501 })
   }
 }
