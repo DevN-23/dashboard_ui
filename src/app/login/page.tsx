@@ -1,25 +1,29 @@
 'use client'
 
-import InputField from '@/components/InputField'
-import { ERROR_MESSAGES } from '@/lib/constants'
-import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useState } from 'react'
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import toast from 'react-hot-toast'
+import InputField from '@/components/InputField'
+import * as CONSTANTS from '@/lib/constants'
+import Loader from '@/components/Loader'
 
 const schema = z.object({
-  email: z.string().email({ message: ERROR_MESSAGES.EMAIL_REQUIRED }),
-  password: z.string().min(8, { message: ERROR_MESSAGES.PASSWORD_REQUIRED }),
+  email: z.string().email({ message: CONSTANTS.ERROR_MESSAGES.EMAIL_REQUIRED }),
+  password: z
+    .string()
+    .min(8, { message: CONSTANTS.ERROR_MESSAGES.PASSWORD_REQUIRED }),
 })
 
 type Inputs = z.infer<typeof schema>
 
 const LoginPage = () => {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
   const {
     register,
@@ -28,14 +32,15 @@ const LoginPage = () => {
   } = useForm<Inputs>({ resolver: zodResolver(schema) })
 
   const login = handleSubmit(async (data) => {
-    console.log('-data', data)
     try {
-      const res = await axios.post('/api/users/login', data)
-      console.log(res)
-      toast.success('Login Success!')
-      router.push('/admin')
+      setLoading(true)
+      await axios.post(CONSTANTS.API_ROUTES.LOGIN, data)
+      router.push(CONSTANTS.WEB_ROUTES.ADMIN)
+      toast.success(CONSTANTS.RESPONSE_MESSAGES.LOGIN_SUCCESS)
     } catch (error: any) {
       toast.error(error.message)
+    } finally {
+      setLoading(false)
     }
   })
 
@@ -45,7 +50,11 @@ const LoginPage = () => {
         onSubmit={login}
         className="bg-white w-[380px] max-w-[90%] mx-auto p-4 rounded-md flex flex-col gap-4"
       >
-        <h1 className="text-xl font-semibold text-center">SignIn</h1>
+        {loading ? (
+          <Loader />
+        ) : (
+          <h1 className="text-xl font-semibold text-center">SignIn</h1>
+        )}
         <InputField
           label="Email"
           name="email"

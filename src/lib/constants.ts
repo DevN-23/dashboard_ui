@@ -26,7 +26,7 @@ export const menuItems = [
       {
         icon: '/home.png',
         label: 'Home',
-        href: '/',
+        href: '/admin',
         visible: ['admin', 'teacher', 'student', 'parent'],
       },
       {
@@ -136,8 +136,8 @@ export const menuItems = [
 
 
 export const RESPONSE_MESSAGES = {
-  LOGIN_SUCCESS: '',
-  LOGIN_FAILED: '',
+  LOGIN_SUCCESS: 'Login successfully!',
+  LOGIN_FAILED: 'Login failed!',
   SIGNUP_SUCCESS: '',
   SIGNUP_FAILED: '',
   LOGOUT_SUCCESS: 'Logged out successfully!',

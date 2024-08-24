@@ -3,13 +3,14 @@
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import toast from 'react-hot-toast'
 import * as CONSTANTS from '@/lib/constants'
 import { role } from '@/lib/data'
 
 const Menu = () => {
   const router = useRouter()
+  const pathname = usePathname()
 
   const logout = async () => {
     try {
@@ -52,7 +53,9 @@ const Menu = () => {
                 <Link
                   href={item.href}
                   key={item.label}
-                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-devSkyLight cursor-pointer"
+                  className={`flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-devSkyLight cursor-pointer ${
+                    item.href === pathname ? 'bg-devSkyLight' : ''
+                  }`}
                 >
                   <Image
                     src={item.icon}
