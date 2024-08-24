@@ -4,7 +4,6 @@ import Image from 'next/image'
 import {
   BarChart,
   Bar,
-  Rectangle,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -22,22 +21,22 @@ const data = [
   {
     name: 'Tue',
     present: 60,
-    absent: 12,
+    absent: 42,
   },
   {
     name: 'Wed',
     present: 55,
-    absent: 10,
+    absent: 70,
   },
   {
     name: 'Thur',
     present: 67,
-    absent: 15,
+    absent: 45,
   },
   {
     name: 'Fri',
     present: 50,
-    absent: 10,
+    absent: 60,
   },
 ]
 
@@ -91,13 +90,13 @@ const AttendanceChart = () => {
           />
           <Bar
             dataKey="present"
-            fill="#FAE27C"
+            fill="#abebc6"
             legendType="circle"
             radius={[10, 10, 0, 0]}
           />
           <Bar
             dataKey="absent"
-            fill="#C3EBFA"
+            fill="#d2b4de"
             legendType="circle"
             radius={[10, 10, 0, 0]}
           />
